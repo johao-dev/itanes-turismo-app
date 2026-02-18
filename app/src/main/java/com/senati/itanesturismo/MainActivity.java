@@ -8,6 +8,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+// TODO: Está clase será reubicada en futuros commits
 public class MainActivity extends AppCompatActivity {
 
     @Override
