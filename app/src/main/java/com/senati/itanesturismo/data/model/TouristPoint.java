@@ -27,7 +27,7 @@ public class TouristPoint {
     private String photoUrl;
 
     @ColumnInfo(name = "tourist_point_address")
-    private String touristPointAddress;
+    private String address;
     private double latitude;
     private double longitude;
 
