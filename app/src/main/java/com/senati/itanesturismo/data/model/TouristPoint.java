@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity(tableName = "tourist_points")
 public class TouristPoint {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int id;
     private String name;
 
