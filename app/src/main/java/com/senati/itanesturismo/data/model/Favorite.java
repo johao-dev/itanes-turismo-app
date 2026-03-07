@@ -2,7 +2,6 @@ package com.senati.itanesturismo.data.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,12 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(tableName = "users")
-public class User {
+@Entity(tableName = "favorites", primaryKeys = {"tourist_point_id", "user_id"})
+public class Favorite {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @ColumnInfo(name = "user_id")
+    private int userId;
 
-    @ColumnInfo(name = "username")
-    private String username;
+    @ColumnInfo(name = "tourist_point_id")
+    private int touristPointId;
 }
