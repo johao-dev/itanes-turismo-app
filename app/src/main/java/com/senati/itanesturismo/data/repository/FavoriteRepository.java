@@ -4,6 +4,12 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import com.senati.itanesturismo.data.local.AppDatabase;
 import com.senati.itanesturismo.data.local.LocalDataSource;
 import com.senati.itanesturismo.data.model.Favorite;
@@ -43,19 +49,19 @@ public class FavoriteRepository {
             remote.getFavorites().enqueue(new Callback<JSendResponse<FavoritesData>>() {
                 @Override
                 public void onResponse(
-                        Call<JSendResponse<FavoritesData>> call,
-                        Response<JSendResponse<FavoritesData>> response
+                    Call<JSendResponse<FavoritesData>> call,
+                    Response<JSendResponse<FavoritesData>> response
                 ) {
                     if (response.isSuccessful()) {
                         List<TouristPoint> entities = response.body().data().favorites().stream()
-                                .map(TouristPointMapper::toEntity)
-                                .collect(Collectors.toList());
+                            .map(TouristPointMapper::toEntity)
+                            .collect(Collectors.toList());
 
                         executor.execute(() -> {
                             local.saveTouristPoints(entities);
 
                             for (TouristPoint tp : entities) {
-                                local.addFavorite(new Favorite(userId, tp.getId()));
+                                local.addFavorite(new Favorite(userId, tp.getId(), Favorite.SYNC_STATUS_OK));
                             }
                         });
                         callback.onSuccess(entities);
@@ -64,8 +70,8 @@ public class FavoriteRepository {
 
                 @Override
                 public void onFailure(
-                        Call<JSendResponse<FavoritesData>> call,
-                        Throwable t
+                    Call<JSendResponse<FavoritesData>> call,
+                    Throwable t
                 ) {
                     executor.execute(() -> {
                         List<TouristPoint> localData = local.getFavoritesByUserId(userId);
@@ -86,52 +92,90 @@ public class FavoriteRepository {
     }
 
     public void addFavorite(int userId, int touristPointId) {
-        Favorite favorite = new Favorite(userId, touristPointId);
-
         executor.execute(() -> {
+            Favorite favorite = new Favorite(userId, touristPointId, Favorite.SYNC_STATUS_PENDING_ADD);
             local.addFavorite(favorite);
-        });
 
-        if (NetworkUtils.isOnline(context)) {
-            remote.addFavorite(touristPointId)
-                .enqueue(new Callback<JSendResponse<MessageData>>() {
+            if (NetworkUtils.isOnline(context)) {
+                remote.addFavorite(touristPointId).enqueue(new Callback<JSendResponse<MessageData>>() {
                     @Override
                     public void onResponse(
                         Call<JSendResponse<MessageData>> call,
                         Response<JSendResponse<MessageData>> response
-                    ) { }
+                    ) {
+                        if (response.isSuccessful()) {
+                            executor.execute(() ->
+                                local.updateFavoriteSyncStatus(touristPointId, userId, Favorite.SYNC_STATUS_OK)
+                            );
+                        } else {
+                            scheduleSyncWorker();
+                        }
+                    }
 
                     @Override
-                    public void onFailure(
-                        Call<JSendResponse<MessageData>> call,
-                        Throwable t
-                    ) { }
-                }
-            );
-        }
+                    public void onFailure(Call<JSendResponse<MessageData>> call, Throwable t) {
+                        scheduleSyncWorker();
+                    }
+                });
+            } else {
+                scheduleSyncWorker();
+            }
+        });
     }
 
     public void removeFavorite(int userId, int touristPointId) {
         executor.execute(() -> {
-            local.removeFavorite(userId, touristPointId);
-        });
+            Favorite existing = local.getFavorite(touristPointId, userId);
 
-        if (NetworkUtils.isOnline(context)) {
-            remote.deleteFavorite(touristPointId)
-                .enqueue(new Callback<JSendResponse<MessageData>>() {
+            if (existing != null && existing.getSyncStatus() == Favorite.SYNC_STATUS_PENDING_ADD) {
+                local.removeFavorite(touristPointId, userId);
+                return;
+            }
+
+            if (existing != null) {
+                existing.setSyncStatus(Favorite.SYNC_STATUS_PENDING_DELETE);
+                local.addFavorite(existing);
+            }
+
+            if (NetworkUtils.isOnline(context)) {
+                remote.deleteFavorite(touristPointId).enqueue(new Callback<JSendResponse<MessageData>>() {
                     @Override
                     public void onResponse(
                         Call<JSendResponse<MessageData>> call,
                         Response<JSendResponse<MessageData>> response
-                    ) { }
+                    ) {
+                        if (response.isSuccessful()) {
+                            // Si la respuesta está OK en la API, el favorite ya fue sincronizado
+                            // y eliminado de la bd local
+                        } else {
+                            scheduleSyncWorker();
+                        }
+                    }
 
                     @Override
-                    public void onFailure(
-                        Call<JSendResponse<MessageData>> call,
-                        Throwable t
-                    ) { }
-                }
-            );
-        }
+                    public void onFailure(Call<JSendResponse<MessageData>> call, Throwable t) {
+                        scheduleSyncWorker();
+                    }
+                });
+            } else {
+                scheduleSyncWorker();
+            }
+        });
+    }
+
+    private void scheduleSyncWorker() {
+        Constraints constraints = new Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build();
+
+        OneTimeWorkRequest syncRequest = new OneTimeWorkRequest.Builder(FavoriteSyncWorker.class)
+            .setConstraints(constraints)
+            .build();
+
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            "FavoriteSync",
+            ExistingWorkPolicy.REPLACE,
+            syncRequest
+        );
     }
 }
