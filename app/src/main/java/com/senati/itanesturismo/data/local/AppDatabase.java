@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.senati.itanesturismo.data.model.Favorite;
 import com.senati.itanesturismo.data.model.TouristPoint;
 
-@Database(entities = { Favorite.class, TouristPoint.class }, version = 1)
+@Database(entities = { Favorite.class, TouristPoint.class }, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
