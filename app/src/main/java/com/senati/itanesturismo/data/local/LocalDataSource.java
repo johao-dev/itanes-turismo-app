@@ -27,6 +27,14 @@ public class LocalDataSource {
         return favoriteDAO.findAllFavoritesByUserId(userId);
     }
 
+    public List<Favorite> getFavoritesBySyncStatus(int status) {
+        return favoriteDAO.getFavoritesBySyncStatus(status);
+    }
+
+    public void updateFavoriteSyncStatus(int touristPointId, int userId, int status) {
+        favoriteDAO.updateFavoriteSyncStatus(touristPointId, userId, status);
+    }
+
     // Estos métodos sirve para sincronizar los datos de la API con la base de datos local
     public void saveTouristPoints(List<TouristPoint> touristPoints) {
         touristPointDAO.insertAll(touristPoints);
@@ -40,6 +48,10 @@ public class LocalDataSource {
     }
 
     public void removeFavorite(int userId, int touristPointId) {
-        favoriteDAO.deleteByIds(userId, touristPointId);
+        favoriteDAO.deletePermanently(userId, touristPointId);
+    }
+
+    public Favorite getFavorite(int touristPointId, int userId) {
+        return favoriteDAO.getFavorite(touristPointId, userId);
     }
 }
