@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ITANES turismo</string>
+    <string name="logo_itanes_turismo">Logo ITANES turismo</string>
+    <string name="iniciar_sesi_n">Iniciar Sesión</string>
+    <string name="usuario">Usuario</string>
+    <string name="contrase_a">Contraseña</string>
+    <string name="descrubre_el_per">¡Descrubre el Perú!</string>
 </resources>

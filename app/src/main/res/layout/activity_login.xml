@@ -11,103 +11,89 @@
     android:background="@drawable/fondo"
     tools:context=".ui.login.LoginActivity">
 
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         app:cardCornerRadius="30dp"
-        app:cardElevation="20dp"
-        >
+        app:cardElevation="20dp" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
-        android:padding="24dp"
-        android:background="@color/lavanda">
-
-        <ImageView
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_gravity="center"
-            android:src="@drawable/logo"
-
-
-            >
-
-        </ImageView>
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Iniciar Sesión"
-            android:fontFamily="@font/robotocondensed_black"
-            android:textSize="28sp"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:textAlignment="center">
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:padding="24dp"
+            android:background="@color/lavanda" >
 
-        </TextView>
+            <ImageView
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo"
+                android:contentDescription="@string/logo_itanes_turismo"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/etuser"
-            android:background="@drawable/lavander_border"
-            android:layout_marginTop="40dp"
-            android:padding="8dp"
-            android:hint="Usuario"
-            android:drawableLeft="@drawable/ic_person"
-            android:textColor="@color/black"
-            android:drawablePadding="8dp"
-            ></EditText>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/etpassword"
-            android:background="@drawable/lavander_border"
-            android:layout_marginTop="10dp"
-            android:padding="8dp"
-            android:inputType="numberPassword"
-            android:hint="Contraseña"
-            android:drawableLeft="@drawable/ic_lock"
-            android:textColor="@color/black"
-            android:drawablePadding="8dp"
-            ></EditText>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/iniciar_sesi_n"
+                android:fontFamily="@font/robotocondensed_black"
+                android:textSize="28sp"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textAlignment="center" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:id="@+id/btnLogin"
-            android:text="Inciar Sesión"
-            android:fontFamily="@font/robotocondensed_black"
-            android:textSize="18sp"
-            android:layout_marginTop="30dp"
-            app:cornerRadius = "20dp"
-            android:backgroundTint="@color/black">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/etuser"
+                android:background="@drawable/lavander_border"
+                android:layout_marginTop="40dp"
+                android:autofillHints="no"
+                android:padding="8dp"
+                android:hint="@string/usuario"
+                android:inputType="text"
+                android:drawableStart="@drawable/ic_person"
+                android:textColor="@color/black"
+                android:drawablePadding="8dp" />
 
-        </Button>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="¡Descrubre el Perú!"
-            android:layout_marginTop="25dp"
-            android:textSize="16sp"
-            android:textColor="#787878"
-            android:textStyle="bold"
-            android:textAlignment="center">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/etpassword"
+                android:background="@drawable/lavander_border"
+                android:layout_marginTop="10dp"
+                android:autofillHints="no"
+                android:padding="8dp"
+                android:inputType="numberPassword"
+                android:hint="@string/contrase_a"
+                android:drawableStart="@drawable/ic_lock"
+                android:textColor="@color/black"
+                android:drawablePadding="8dp" />
 
-        </TextView>
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/black"
+                android:fontFamily="@font/robotocondensed_black"
+                android:text="@string/iniciar_sesi_n"
+                android:textSize="18sp"
+                app:cornerRadius="20dp"
+                tools:ignore="DuplicateSpeakableTextCheck" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/descrubre_el_per"
+                android:layout_marginTop="25dp"
+                android:textSize="16sp"
+                android:textColor="#787878"
+                android:textStyle="bold"
+                android:textAlignment="center" />
 
-
-
-
-
-
-    </LinearLayout>
+        </LinearLayout>
 
    </androidx.cardview.widget.CardView>
 
