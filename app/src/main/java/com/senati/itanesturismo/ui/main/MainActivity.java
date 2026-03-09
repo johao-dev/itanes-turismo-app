@@ -35,13 +35,13 @@ public class MainActivity extends AppCompatActivity {
     // TODO: Reemplazar cuando los activities existan
     private void setupClickListeners() {
         binding.btnTouristPoints.setOnClickListener(v -> {
-            //Intent intent = new Intent(MainActivity.this, FakeTouristPointActivity.class);
-            //startActivity(intent);
+            Intent intent = new Intent(MainActivity.this, FakeTouristPointActivity.class);
+            startActivity(intent);
         });
 
         binding.btnFavorites.setOnClickListener(v -> {
-            //Intent intent = new Intent(MainActivity.this, FakeFavoriteActivity.class);
-            //startActivity(intent);
+            Intent intent = new Intent(MainActivity.this, FakeFavoriteActivity.class);
+            startActivity(intent);
         });
     }
 }
