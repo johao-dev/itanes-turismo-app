@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.senati.itanesturismo.databinding.ActivityMainBinding;
+import com.senati.itanesturismo.ui.favorites.FavoriteActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.btnFavorites.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, FakeFavoriteActivity.class);
+            Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
             startActivity(intent);
         });
     }

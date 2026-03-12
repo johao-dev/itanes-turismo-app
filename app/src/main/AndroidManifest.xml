@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ITANESTurismo">
         <activity
-            android:name=".ui.main.FakeFavoriteActivity"
+            android:name=".ui.favorites.FavoriteActivity"
             android:exported="false" />
         <activity
             android:name=".ui.main.FakeTouristPointActivity"
