@@ -18,21 +18,21 @@ import retrofit2.http.Path;
 
 public interface ItanesAPI {
 
-    @POST("/users/login")
+    @POST("users/login")
     Call<JSendResponse<LoginData>> login(@Body LoginRequest loginRequest);
 
-    @GET("/tourist-points")
+    @GET("tourist-points")
     Call<JSendResponse<TouristPointData>> getTouristPoints();
 
-    @GET("/tourist-points/{id}")
+    @GET("tourist-points/{id}")
     Call<JSendResponse<TouristPointResponse>> getTouristPointById(@Path("id") Integer id);
 
-    @GET("/favorites")
+    @GET("favorites")
     Call<JSendResponse<FavoritesData>> getFavorites();
 
-    @POST("/favorites")
+    @POST("favorites")
     Call<JSendResponse<MessageData>> addFavorite(@Body AddFavoriteRequest addFavoriteRequest);
 
-    @DELETE("/favorites/{touristPointId}")
+    @DELETE("favorites/{touristPointId}")
     Call<JSendResponse<MessageData>> deleteFavorite(@Path("touristPointId") Integer touristPointId);
 }

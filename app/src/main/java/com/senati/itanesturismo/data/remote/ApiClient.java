@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    private static final String BASE_URL = "https://itanes-turismo-api-latest.onrender.com/api/v1";
+    private static final String BASE_URL = "https://itanes-turismo-api-latest.onrender.com/api/v1/";
     private static Retrofit retrofit;
     private static ItanesAPI api;
 
