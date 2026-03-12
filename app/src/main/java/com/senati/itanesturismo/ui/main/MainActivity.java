@@ -6,8 +6,10 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.senati.itanesturismo.data.remote.TokenManager;
 import com.senati.itanesturismo.databinding.ActivityMainBinding;
 import com.senati.itanesturismo.ui.favorites.FavoriteActivity;
+import com.senati.itanesturismo.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +45,17 @@ public class MainActivity extends AppCompatActivity {
         binding.btnFavorites.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
             startActivity(intent);
+        });
+
+        binding.btnLogout.setOnClickListener(v -> {
+            TokenManager tokenManager = new TokenManager(MainActivity.this);
+            tokenManager.clearToken();
+
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            startActivity(intent);
+            finish();
         });
     }
 }
