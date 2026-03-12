@@ -1,32 +1,65 @@
 package com.senati.itanesturismo.ui.favorites;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.senati.itanesturismo.R;
-import com.senati.itanesturismo.ui.adapters.FavoriteAdapter;
+import com.senati.itanesturismo.databinding.ActivityFavoriteBinding;
+import com.senati.itanesturismo.ui.adapters.TouristPointAdapter;
 
 import java.util.ArrayList;
 
 public class FavoriteActivity extends AppCompatActivity {
 
-    RecyclerView recyclerFavoritos;
-    FavoriteAdapter adapter;
+    private ActivityFavoriteBinding binding;
+    private TouristPointAdapter adapter;
+    private FavoriteViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_favorite);
+        binding = ActivityFavoriteBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        recyclerFavoritos = findViewById(R.id.recyclerFavoritos);
-        recyclerFavoritos.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new FavoriteAdapter(new ArrayList<>());
-        recyclerFavoritos.setAdapter(adapter);
+        setupRecyclerView();
+        setupViewModel();
+    }
+
+    private void setupRecyclerView() {
+        binding.recyclerFavoritos.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new TouristPointAdapter(new ArrayList<>(), touristPoint ->{
+            Intent intent = new Intent(FavoriteActivity.this, FakeDetailActivity.class);
+            intent.putExtra("TOURIST_POINT_ID", touristPoint.getId());
+            startActivity(intent);
+        });
+
+        binding.recyclerFavoritos.setAdapter(adapter);
+    }
+
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(this).get(FavoriteViewModel.class);
+
+        viewModel.getFavorites().observe(this, favorites -> {
+            if (favorites != null) {
+                adapter.updateData(favorites);
+            }
+        });
+
+        viewModel.getError().observe(this, errorMessage -> {
+            if (errorMessage != null && !errorMessage.isEmpty()) {
+                Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        viewModel.loadFavorites();
     }
 }
