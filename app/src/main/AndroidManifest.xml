@@ -23,9 +23,6 @@
             android:name=".ui.favorites.FavoriteActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.main.FakeTouristPointActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.main.MainActivity"
             android:exported="false" />
         <activity
