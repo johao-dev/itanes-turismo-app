@@ -1,5 +1,6 @@
 package com.senati.itanesturismo.ui.detail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -69,11 +70,20 @@ public class DetailActivity extends AppCompatActivity {
         binding.btnFavorito.setOnClickListener(v -> viewModel.toggleFavorito());
 
         binding.btnRuta.setOnClickListener(v -> {
+            // Axel aqui implmentara el Intent Implícito para abrir Google Maps
             Toast.makeText(this, "Abrir mapa con ruta", Toast.LENGTH_SHORT).show();
         });
 
         binding.btnCompartir.setOnClickListener(v -> {
-            Toast.makeText(this, "Compartir punto turístico", Toast.LENGTH_SHORT).show();
+            String nombreLugar = binding.txtTitulo.getText().toString();
+            String descripcion = binding.txtDescripcion.getText().toString();
+            String mensaje = nombreLugar + "\n" + descripcion;
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, mensaje);
+
+            startActivity(Intent.createChooser(intent, "Compartir con"));
         });
     }
 }
