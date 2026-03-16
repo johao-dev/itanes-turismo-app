@@ -10,6 +10,7 @@ import com.senati.itanesturismo.data.remote.TokenManager;
 import com.senati.itanesturismo.databinding.ActivityMainBinding;
 import com.senati.itanesturismo.ui.favorites.FavoriteActivity;
 import com.senati.itanesturismo.ui.login.LoginActivity;
+import com.senati.itanesturismo.ui.touristpoints.TouristPointActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,10 +36,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // TODO: Reemplazar cuando los activities existan
     private void setupClickListeners() {
         binding.btnTouristPoints.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, FakeTouristPointActivity.class);
+            Intent intent = new Intent(MainActivity.this, TouristPointActivity.class);
             startActivity(intent);
         });
 
