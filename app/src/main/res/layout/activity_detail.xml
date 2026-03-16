@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/detail_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lavanda"
-    tools:context=".ui.main.FakeTouristPointActivity">
+    tools:context=".ui.detail.DetailActivity">
 
     <TextView
         android:layout_width="match_parent"

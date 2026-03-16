@@ -14,16 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ITANESTurismo">
         <activity
+            android:name=".ui.detail.DetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.touristpoints.TouristPointActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.favorites.FakeDetailActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.favorites.FavoriteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.main.FakeTouristPointActivity"
             android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"
