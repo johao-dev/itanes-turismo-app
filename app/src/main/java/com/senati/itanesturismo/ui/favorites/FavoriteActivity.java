@@ -4,15 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.senati.itanesturismo.R;
 import com.senati.itanesturismo.databinding.ActivityFavoriteBinding;
 import com.senati.itanesturismo.ui.adapters.TouristPointAdapter;
+import com.senati.itanesturismo.ui.detail.DetailActivity;
 
 import java.util.ArrayList;
 
@@ -37,7 +35,7 @@ public class FavoriteActivity extends AppCompatActivity {
         binding.recyclerFavoritos.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new TouristPointAdapter(new ArrayList<>(), touristPoint ->{
-            Intent intent = new Intent(FavoriteActivity.this, FakeDetailActivity.class);
+            Intent intent = new Intent(FavoriteActivity.this, DetailActivity.class);
             intent.putExtra("TOURIST_POINT_ID", touristPoint.getId());
             startActivity(intent);
         });

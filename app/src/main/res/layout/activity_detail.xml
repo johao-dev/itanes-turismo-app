@@ -5,6 +5,15 @@
     android:id="@+id/detail_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lavanda"
     tools:context=".ui.detail.DetailActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Details UI"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:gravity="center" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
