@@ -1,26 +1,75 @@
 package com.senati.itanesturismo.ui.detail;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.senati.itanesturismo.R;
+import com.bumptech.glide.Glide;
+import com.senati.itanesturismo.databinding.ActivityDetailBinding;
 
 public class DetailActivity extends AppCompatActivity {
+
+    private ActivityDetailBinding binding;
+    private DetailViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_detail);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail_activity), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        binding = ActivityDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setupViewModel();
+        setupListeners();
+    }
+
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(this).get(DetailViewModel.class);
+
+        viewModel.getLugar().observe(this, touristPoint -> {
+            if (touristPoint != null) {
+                binding.txtTitulo.setText(touristPoint.getName());
+                binding.txtDescripcion.setText(touristPoint.getDescription());
+
+                // Glide para imagen
+                Glide.with(this)
+                        .load(touristPoint.getPhotoUrl())
+                        .into(binding.imgLugar);
+            }
+        });
+
+        viewModel.getIsFavorito().observe(this, isFav -> {
+            binding.btnFavorito.setText(isFav ? "⭐ Guardado" : "⭐ Guardar a Favoritos");
+        });
+
+        viewModel.getError().observe(this, errorMsg -> {
+            if (errorMsg != null && !errorMsg.isEmpty()) {
+                Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        viewModel.getIsLoading().observe(this, loading -> {
+            binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+        });
+
+        // Cargar el punto turístico desde Intent
+        if (getIntent() != null && getIntent().hasExtra("touristPoint")) {
+            viewModel.setLugar(getIntent().getParcelableExtra("touristPoint"));
+        }
+    }
+
+    private void setupListeners() {
+        binding.btnFavorito.setOnClickListener(v -> viewModel.toggleFavorito());
+
+        binding.btnRuta.setOnClickListener(v -> {
+            Toast.makeText(this, "Abrir mapa con ruta", Toast.LENGTH_SHORT).show();
+        });
+
+        binding.btnCompartir.setOnClickListener(v -> {
+            Toast.makeText(this, "Compartir punto turístico", Toast.LENGTH_SHORT).show();
         });
     }
 }
