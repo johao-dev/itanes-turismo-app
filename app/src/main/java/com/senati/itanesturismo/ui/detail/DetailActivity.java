@@ -55,9 +55,13 @@ public class DetailActivity extends AppCompatActivity {
             binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
         });
 
-        // Cargar el punto turístico desde Intent
-        if (getIntent() != null && getIntent().hasExtra("touristPoint")) {
-            viewModel.setLugar(getIntent().getParcelableExtra("touristPoint"));
+        if (getIntent() != null && getIntent().hasExtra("TOURIST_POINT_ID")) {
+            int touristPointId = getIntent().getIntExtra("TOURIST_POINT_ID", -1);
+            if (touristPointId != -1) {
+                viewModel.loadTouristPointById(touristPointId);
+            } else {
+                Toast.makeText(this, "ID de punto turístico inválido", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
