@@ -1,6 +1,7 @@
 package com.senati.itanesturismo.ui.detail;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.senati.itanesturismo.data.model.TouristPoint;
 import com.senati.itanesturismo.databinding.ActivityDetailBinding;
 
 public class DetailActivity extends AppCompatActivity {
@@ -70,8 +72,34 @@ public class DetailActivity extends AppCompatActivity {
         binding.btnFavorito.setOnClickListener(v -> viewModel.toggleFavorito());
 
         binding.btnRuta.setOnClickListener(v -> {
-            // Axel aqui implmentara el Intent Implícito para abrir Google Maps
-            Toast.makeText(this, "Abrir mapa con ruta", Toast.LENGTH_SHORT).show();
+
+            TouristPoint currentPoint = viewModel.getLugar().getValue();
+
+            if (currentPoint != null) {
+                double lat = currentPoint.getLatitude();
+                double lng = currentPoint.getLongitude();
+                String label = currentPoint.getName();
+
+                // 'geo:' es el estándar para mostrar marcadores
+                // El parámetro 'q' permite poner el pin y la etiqueta entre paréntesis
+                String uriString = "geo:" + lat + "," + lng + "?q=" + lat + "," + lng + "(" + Uri.encode(label) + ")";
+                Uri gmmIntentUri = Uri.parse(uriString);
+
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+                // Verificamos si hay una app que pueda manejar el intent antes de lanzarlo
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                } else {
+                    // Si el cel no tiene Google Maps, podemos abrirlo en el navegador como respaldo
+                    Uri webUri = Uri.parse("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng);
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
+                    startActivity(webIntent);
+                }
+            } else {
+                Toast.makeText(this, "Datos del lugar no disponibles", Toast.LENGTH_SHORT).show();
+            }
         });
 
         binding.btnCompartir.setOnClickListener(v -> {
